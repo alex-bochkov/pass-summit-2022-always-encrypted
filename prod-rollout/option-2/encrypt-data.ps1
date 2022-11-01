@@ -53,6 +53,9 @@ While ($True) {
 
 BEGIN TRAN;
 
+-- can't rename the column when it has an index
+DROP INDEX temp_enc_site_users ON [dbo].[site_users];
+
 EXEC sp_rename 'dbo.site_users.email_address', 'email_address_decrypted', 'COLUMN';
 EXEC sp_rename 'dbo.site_users.email_address_encrypted', 'email_address', 'COLUMN';
 
