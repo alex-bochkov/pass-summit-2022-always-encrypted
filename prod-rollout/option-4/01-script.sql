@@ -33,7 +33,7 @@ BEGIN
     UPDATE [dbo].[site_users]
     SET [needsEncryption]         = 1,
         [email_address_encrypted] = NULL
-    WHERE PK_id IN (SELECT PK_id FROM inserted);
+    WHERE [user_id] IN (SELECT [user_id] FROM inserted);
 END
 
 END
