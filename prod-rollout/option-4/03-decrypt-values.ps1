@@ -26,8 +26,8 @@ SET CONTEXT_INFO 0x01010101;
 UPDATE [dbo].[site_users]
 SET [needsDecryption]          = 0, 
     [email_address_decrypted]  = @email_address_plain_text,
-WHERE user_id = @user_id 
-    AND email_address = @email_address_encrypted -- (optimistic lock might be a good idea)
+WHERE [user_id] = @user_id 
+    AND [email_address] = @email_address_encrypted -- (optimistic lock might be a good idea)
 
 "
 
@@ -77,7 +77,7 @@ BEGIN
     UPDATE [dbo].[site_users]
     SET [needsEncryption]         = 1,
         [email_address_encrypted] = NULL
-    WHERE PK_id IN (SELECT PK_id FROM inserted);
+    WHERE [user_id] IN (SELECT [user_id] FROM inserted);
 END
 
 END
