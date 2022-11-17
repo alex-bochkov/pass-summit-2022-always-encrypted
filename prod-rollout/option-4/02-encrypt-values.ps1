@@ -18,8 +18,8 @@ SELECT TOP 10000
     [user_id],
     [email_address]
 FROM [dbo].[site_users] WITH (FORCESEEK)
-WHERE needsEncryption = 1
-   AND PK_id % $ThreadCount = $ThreadId
+WHERE [needsEncryption] = 1
+   AND [user_id] % $ThreadCount = $ThreadId
 
 UNION
 
@@ -27,8 +27,8 @@ SELECT TOP 10000
     [user_id],
     [email_address]
 FROM [dbo].[site_users]
-WHERE needsEncryption IS NULL
-   AND PK_id % $ThreadCount = $ThreadId;
+WHERE [needsEncryption] IS NULL
+   AND [user_id] % $ThreadCount = $ThreadId;
    
 "
 
@@ -41,8 +41,8 @@ SET CONTEXT_INFO 0x01010101;
 UPDATE [dbo].[site_users]
 SET [needsEncryption]          = 0, 
     [email_address_encrypted]  = @email_address_encrypted,
-WHERE user_id = @user_id 
-    AND email_address = @email_address_plain_text -- (optimistic lock might be a good idea)
+WHERE [user_id] = @user_id 
+    AND [email_address] = @email_address_plain_text -- ("optimistic" lock might be a good idea)
 
 "
 
@@ -90,7 +90,7 @@ BEGIN
     UPDATE [dbo].[site_users]
     SET [needsDecryption]         = 1,
         [email_address_decrypted] = NULL
-    WHERE PK_id IN (SELECT PK_id FROM inserted);
+    WHERE [user_id] IN (SELECT [user_id] FROM inserted);
 END
 
 END
